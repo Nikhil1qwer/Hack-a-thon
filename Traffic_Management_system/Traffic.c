@@ -66,7 +66,7 @@ void OptimizeTrafficFlow(bool a) {
     if(a) {
         for(int i = 0; i < VehicleCount; i++) {
             int I = FlowControl[i];
-            printf("Id: %s\t", list[I]->Id);
+            printf("Vehicle Id: %s\t", list[I]->Id);
             printf("Route: %c\t", list[I]->Route);
             printf("Speed: %d\n", list[I]->Speed);
         }
