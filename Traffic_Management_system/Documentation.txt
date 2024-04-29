@@ -1,20 +1,43 @@
-Introduction: To implement a Data Structure to simulate Traffic flow & congestion on a road network.
+Title: Traffic Management System in C
 
-Goal: Simulation of Traffic flow and congestion on a road network.
-      Tracking vehicle's speed, route, Vehicle ID and Optimization of
-      traffic signals at intersection, and provide real-time updates on traffic conditions.
+Introduction:
+            The Traffic Management System is a C program designed to manage and optimize traffic flow.
+            It provides functionalities for registering vehicles, optimizing traffic signals,
+            monitoring real-time traffic conditions, and displaying vehicle data.
 
-Intuition WalkThrough:
+Code Overview:
+        The code consists of several functions and data structures to facilitate traffic management:
 
-    The Traffic Management System starts with a kickstart Menu that displays the basic functionalities of the system
-    such as Register Vehicle, Optimize Traffic Signals at intersection and Display the queried data
+Data Structures:
 
-    It uses structured array to process the data received and manipulates the data as per the users command.
+Vehicle structure: 
+                Represents a vehicle with attributes like ID, route, and speed.
 
-Contribution: 
-        1. Optimizes the traffic conditions on different routes.
-        2. While keeping track of vehicle details such as Vehicle ID, route and speed.
-        3. Useful for maintaining the stable traffic flow.
-        4. Provides the structured data for any Queries.
+list:
+     A dynamic array of pointers to Vehicle structures, used to store vehicle data.
+
+RutF and RutA: 
+    Arrays to store route frequency and speed accumulation respectively.
+
+Main Functionality:
+
+Registration of Vehicles:
+                     Users can register vehicles by providing their ID, route, and speed. The program dynamically allocates memory to store vehicle data.
+
+Optimizing Traffic Signals: 
+                     Traffic signals can be optimized based on either route or intersection. 
+                     The program sorts vehicles based on route frequency and speed, providing an optimized flow.
+
+Monitoring Real-Time Traffic Conditions:
+                     Users can view real-time traffic conditions, including route-wise traffic density and average speeds.
+
+Displaying Vehicle Data:
+                     Users have the option to display all registered vehicle data.
+
+Additional Features:
+    Color-coded Output: The program utilizes ANSI escape codes to colorize output for better visualization.
+    Error Handling: Error messages are displayed for invalid commands.
+    User Interaction: Users interact with the system through a menu-driven interface.
 
 Version: 0.0.1
+By Umar & Nikhil.

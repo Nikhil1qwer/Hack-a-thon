@@ -96,7 +96,7 @@ void RealTimeTraffic() {
             } else {
                 printf("Heavy ");
             }
-            printf("%d\n", RutA[i] / RutF[i]);
+            printf(", Average Speed: %d\n", RutA[i] / RutF[i]);
         }
     }
 }
@@ -110,7 +110,7 @@ void DisplayTraffic() {
 }
 
 void ThrowError() {
-    printf(RED"\nError 402. Command Not Found\n"CLEAR);
+    printf(RED"\nError 402 Command Not Found\n"CLEAR);
 }
 
 
@@ -171,15 +171,7 @@ int main() {
         }
 
     } while(true);
+
+    return 0;
 }
-
-
-
-
-
-
-
-
-
-
 
