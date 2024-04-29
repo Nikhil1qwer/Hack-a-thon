@@ -1,0 +1,20 @@
+Introduction: To implement a Data Structure to simulate Traffic flow & congestion on a road network.
+
+Goal: Simulation of Traffic flow and congestion on a road network.
+      Tracking vehicle's speed, route, Vehicle ID and Optimization of
+      traffic signals at intersection, and provide real-time updates on traffic conditions.
+
+Intuition WalkThrough:
+
+    The Traffic Management System starts with a kickstart Menu that displays the basic functionalities of the system
+    such as Register Vehicle, Optimize Traffic Signals at intersection and Display the queried data
+
+    It uses 
+
+Contribution: 
+        1. Optimizes the traffic conditions on different routes.
+        2. While keeping track of vehicle details such as Vehicle ID, route and speed.
+        3. Useful for maintaining the stable traffic flow.
+        4. Provides the structured data for any Queries.
+
+Version: 0.0.1
