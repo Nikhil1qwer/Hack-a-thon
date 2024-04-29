@@ -19,7 +19,7 @@ typedef struct vehicle {
 Vehicle** list = NULL;
 
 int VehicleCount;
-int RutF[26] = {0};
+int RutF[26], RutA[26];
 
 
 void PromptQuery() {
@@ -38,6 +38,8 @@ void PromptQuery() {
 
     printf("Enter Vehicle Speed: ");
     scanf("%d", &list[VehicleCount]->Speed);
+
+    RutA[list[VehicleCount]->Route - 'A'] +=  list[VehicleCount]->Speed;
     
     VehicleCount++;
 }
@@ -71,11 +73,37 @@ void OptimizeTrafficFlow(bool a) {
             printf("Speed: %d\n", list[I]->Speed);
         }
     }
+    if(!a) {
+        char c;
+        printf("Enter Intersection to Optimize: ");
+        scanf(" %c", &c);
+        if(RutF[c - 'A']) {
+            printf(GREEN"Optimized at Intersection %c\n" CLEAR, c);
+        } else {
+            printf(RED"Intersection doesn't Exist\n"CLEAR);
+        }
+    }
+}
+
+void RealTimeTraffic() {
+    for(int i = 0; i < 26; i++) {
+        if(RutF[i]) {
+            printf("Route %c: ", i + 'A');
+            if(RutF[i] <= 3) {
+                printf("Light ");
+            } else if(RutF[i] <= 5) {
+                printf("Moderate ");
+            } else {
+                printf("Heavy ");
+            }
+            printf("%d\n", RutA[i] / RutF[i]);
+        }
+    }
 }
 
 void DisplayTraffic() {
     for(int i = 0; i < VehicleCount; i++) {
-        printf("Id: %s\t", list[i]->Id);
+        printf("\nId: %s\t", list[i]->Id);
         printf("Route: %c\t", list[i]->Route);
         printf("Speed: %d\n", list[i]->Speed);
     }
@@ -115,8 +143,9 @@ int main() {
         printf("\n");
         printf("1. Add Vehicle\n");
         printf("2. Optimize Traffic Signals\n");
-        printf("3. Display\n");
-        printf("4. Exit\n");
+        printf("3. RealTime Traffic Conditions\n");
+        printf("4. Display\n");
+        printf("5. Exit\n");
         printf("Choose Event: ");
         scanf("%d", &Query);
 
@@ -129,9 +158,12 @@ int main() {
                     OptimizeTrafficFlow(false);
                     break;
             case 3:
-                    Display();
+                    RealTimeTraffic();
                     break;
             case 4:
+                    Display();
+                    break;
+            case 5:
                     ThankUser();
                     exit(0);
             default:
@@ -140,3 +172,14 @@ int main() {
 
     } while(true);
 }
+
+
+
+
+
+
+
+
+
+
+

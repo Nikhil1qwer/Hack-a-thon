@@ -9,7 +9,7 @@ Intuition WalkThrough:
     The Traffic Management System starts with a kickstart Menu that displays the basic functionalities of the system
     such as Register Vehicle, Optimize Traffic Signals at intersection and Display the queried data
 
-    It uses 
+    It uses structured array to process the data received and manipulates the data as per the users command.
 
 Contribution: 
         1. Optimizes the traffic conditions on different routes.
