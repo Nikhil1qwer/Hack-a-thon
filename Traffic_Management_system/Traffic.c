@@ -19,8 +19,56 @@ typedef struct vehicle {
 Vehicle** list = NULL;
 
 int VehicleCount;
-int RutF[26], RutA[26];
+int RutF[26], RutA[26]; // Constant O(1)
 
+void PromptQuery();
+void RegisterVehicle();
+void cmp(const void* a, const void* b);
+void OptimizeTrafficFlow(bool a);
+void RealTimeTraffic();
+void DisplayTraffic();
+void ThrowError();
+void Display();
+void window_alert();
+void ThankUser();
+
+int main() {
+    do {
+        int Query;
+        printf("\n");
+        printf("1. Add Vehicle\n");
+        printf("2. Optimize Traffic Signals\n");
+        printf("3. RealTime Traffic Conditions\n");
+        printf("4. Display\n");
+        printf("5. Exit\n");
+        printf("Choose Event: ");
+        scanf("%d", &Query);
+
+        switch(Query) {
+            case 1:
+                    RegisterVehicle(); // O(1)
+                    window_alert();
+                    break;
+            case 2:
+                    OptimizeTrafficFlow(false); // O(N log N)
+                    break;
+            case 3:
+                    RealTimeTraffic(); // O(N)
+                    break;
+            case 4:
+                    Display(); // O(N)
+                    break;
+            case 5:
+                    ThankUser();
+                    exit(0);
+            default:
+                    ThrowError();
+        }
+
+    } while(true);
+
+    return 0;
+}
 
 void PromptQuery() {
     list[VehicleCount] = (Vehicle *)malloc(sizeof(Vehicle));
@@ -135,43 +183,5 @@ void ThankUser() {
 
 void window_alert() {
     printf(GREEN"\nRegistered\n"CLEAR);
-}
-
-int main() {
-    do {
-        int Query;
-        printf("\n");
-        printf("1. Add Vehicle\n");
-        printf("2. Optimize Traffic Signals\n");
-        printf("3. RealTime Traffic Conditions\n");
-        printf("4. Display\n");
-        printf("5. Exit\n");
-        printf("Choose Event: ");
-        scanf("%d", &Query);
-
-        switch(Query) {
-            case 1:
-                    RegisterVehicle();
-                    window_alert();
-                    break;
-            case 2:
-                    OptimizeTrafficFlow(false);
-                    break;
-            case 3:
-                    RealTimeTraffic();
-                    break;
-            case 4:
-                    Display();
-                    break;
-            case 5:
-                    ThankUser();
-                    exit(0);
-            default:
-                    ThrowError();
-        }
-
-    } while(true);
-
-    return 0;
 }
 

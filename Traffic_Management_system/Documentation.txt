@@ -6,18 +6,18 @@ Introduction:
             monitoring real-time traffic conditions, and displaying vehicle data.
 
 Code Overview:
-        The code consists of several functions and data structures to facilitate traffic management:
+         The code consists of several functions and data structures to facilitate traffic management:
 
 Data Structures:
 
 Vehicle structure: 
-                Represents a vehicle with attributes like ID, route, and speed.
+             Represents a vehicle with attributes / values like ID, route, and speed.
 
 list:
      A dynamic array of pointers to Vehicle structures, used to store vehicle data.
 
 RutF and RutA: 
-    Arrays to store route frequency and speed accumulation respectively.
+     Arrays to store route frequency and speed accumulation respectively.
 
 Main Functionality:
 
@@ -38,6 +38,16 @@ Additional Features:
     Color-coded Output: The program utilizes ANSI escape codes to colorize output for better visualization.
     Error Handling: Error messages are displayed for invalid commands.
     User Interaction: Users interact with the system through a menu-driven interface.
+
+Code Analysis:
+
+Time Complexity:
+        The overall time complexity of the system depends on the user's interactions with the program.
+        The core functionalities, such as vehicle registration, traffic signal optimization, and data display, have efficient time complexities.
+
+Space Complexity: 
+        The space complexity is primarily determined by the storage of vehicle data and route statistics. 
+        The system efficiently manages memory allocation, and the space complexity remains reasonable.
 
 Version: 0.0.1
 By Umar & Nikhil.
