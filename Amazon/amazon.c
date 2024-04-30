@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <string.h>
 #include <stdbool.h>
 
@@ -9,14 +8,7 @@
 #define CLEAR "\x1B[0m"
 
 typedef struct {
-    char itemname[20];
-    int Nitems;
-    int price;
-    struct node *next;
-} Cart;
-
-typedef struct {
-    char* itemname;
+    char *itemname;
     int quantity;
     int price;
 } Item;
@@ -30,23 +22,23 @@ typedef struct {
     char *name;
     int id;
     char *password;
-    Cart* cart;
+    int cart_size;
+    Item *cart;
 } Customer;
 
 bool Exit = false;
 int newid = 100;
 int newitemid = 10005;
 
-Item** store = NULL;
-Customer** list = NULL;
+Item **store = NULL;
+Customer **list = NULL;
 Employee **Mlist = NULL;
 
-void initializeStore(){
-
-    Item** store = (Item**)malloc(5 * sizeof(Item*));
+void initializeStore() {
+    store = (Item **)malloc(5 * sizeof(Item *));
     for (int i = 0; i < 5; i++) {
         store[i] = (Item *)malloc(sizeof(Item));
-        store[i]->itemname = (char *)malloc(sizeof(char) * 12);
+        store[i]->itemname = (char *)malloc(20 * sizeof(char)); // Allocate memory for itemname
     }
 
     strcpy(store[0]->itemname, "Pencil");
@@ -68,15 +60,14 @@ void initializeStore(){
     strcpy(store[4]->itemname, "Mouse");
     store[4]->price = 250;
     store[4]->quantity = 35;
-
 }
 
 void initializeEmployeeList() {
-    Mlist = (Employee **)malloc(4 * sizeof(Employee *));
+    Mlist = (Employee **)malloc(3 * sizeof(Employee *));
     for (int i = 0; i < 3; i++) {
-        Mlist[i] = (Employee*)malloc(sizeof(Employee));
-        Mlist[i]->name = (char *)malloc(sizeof(char) * 12);
-        Mlist[i]->password = (char *) malloc(sizeof(char) * 12);
+        Mlist[i] = (Employee *)malloc(sizeof(Employee));
+        Mlist[i]->name = (char *)malloc(12 * sizeof(char)); // Allocate memory for name
+        Mlist[i]->password = (char *)malloc(12 * sizeof(char)); // Allocate memory for password
     }
     strcpy(Mlist[0]->name, "Nikhil");
     strcpy(Mlist[0]->password, "1234");
@@ -102,17 +93,17 @@ void ThrowError() {
     printf(RED"\nError 402 Command Not Found\n"CLEAR);
 }
 
-void LogConfrim() {
-    printf(GREEN"Login Successfull! \n"CLEAR);
+void LogConfirm() {
+    printf(GREEN"Login Successful!\n"CLEAR);
 }
 
 void AddItem() {
-    store = (Item **)realloc(store, (newitemid - 10000 + 1) * sizeof(Item *));
-    int index = newitemid - 10000;
+    int index = newitemid - 10005;
+    store = (Item **)realloc(store, (index + 1) * sizeof(Item *));
     store[index] = (Item *)malloc(sizeof(Item));
+    store[index]->itemname = (char *)malloc(20 * sizeof(char)); // Allocate memory for itemname
 
-    store[index]->itemname = (char *) malloc(sizeof(char) * 12);
-    printf("Enter Item Name : ");
+    printf("Enter Item Name: ");
     scanf("%s", store[index]->itemname);
 
     printf("Enter Item Quantity: ");
@@ -125,34 +116,31 @@ void AddItem() {
     newitemid++;
 }
 
-
-
-void StockUp(){
-    printf("Enter Item Id : ");
+void StockUp() {
     int id;
+    printf("Enter Item Id: ");
     scanf("%d", &id);
 
     int add;
-    printf("Enter Item Quantity : ");
+    printf("Enter Item Quantity: ");
     scanf("%d", &add);
 
-    store[id]->quantity += add;
+    store[id - 10005]->quantity += add;
 }
 
-void DisplayStock(){
-	int size = newitemid - 10000;
-	printf("Item Id\t\tItem Name\t\tPresent Stock\n");
-	for(int i = 0; i < size;i++){
-	  	printf("%d \t\t %s \t\t %d\n", 10000 + i, store[i]->itemname, store[i]->quantity);	
-	}
+void DisplayStock() {
+    printf("\tItem Id\t\tItem Name\t\tPresent Stock\n");
+    for (int i = 0; i < newitemid - 10000; i++) {
+        printf("%11d \t\t %11s \t\t %11d\n", 10000 + i, store[i]->itemname, store[i]->quantity);
+    }
 }
 
 void RegisterUser() {
-    list = (Customer **)realloc(list, (newid - 99) * sizeof(Customer *));
     int index = newid - 100;
+    list = (Customer **)realloc(list, index * sizeof(Customer *));
     list[index] = (Customer *)malloc(sizeof(Customer));
-    list[index]->name = (char *)malloc(sizeof(char) * 12);
-    list[index]->password = (char *)malloc(sizeof(char) * 12);
+    list[index]->name = (char *)malloc(12 * sizeof(char)); // Allocate memory for name
+    list[index]->password = (char *)malloc(12 * sizeof(char)); // Allocate memory for password
     printf("Enter your Name: ");
     scanf("%s", list[index]->name);
 
@@ -176,11 +164,7 @@ bool LogEmployee() {
 
     int check = strcmp(Mlist[id]->password, enter_password);
 
-    if (!check) {
-        return true;
-    }
-
-    return false;
+    return !check;
 }
 
 bool LogUser() {
@@ -194,13 +178,8 @@ bool LogUser() {
 
     int check = strcmp(list[id - 100]->password, pass);
 
-    if (check == 0) {
-        return true;
-    }
-
-    return false;
+    return check == 0;
 }
-
 
 void LogInterface();
 void LogError();
@@ -215,15 +194,15 @@ void LogInterface() {
 
     if (choice == 1) {
         if (LogUser()) {
-            LogConfrim();
+            LogConfirm();
             // BuyInStore();
         } else {
             LogError();
         }
     } else if (choice == 2) {
         if (LogEmployee()) {
-            LogConfrim();
-            int flag = 0, choice;
+            LogConfirm();
+            int flag = 0;
             do {
                 printf("1. Stock Items\n");
                 printf("2. Restock Items\n");
@@ -232,7 +211,7 @@ void LogInterface() {
                 printf("Enter Your Choice: ");
                 scanf("%d", &choice);
 
-                switch(choice) {
+                switch (choice) {
                     case 1:
                         AddItem();
                         break;
@@ -243,20 +222,18 @@ void LogInterface() {
                         DisplayStock();
                         break;
                     case 4:
-                        flag = true;
+                        flag = 1;
                         ThankEmployee();
                         break;
                     default:
                         ThrowError();
-                    
                 }
-            }while(!flag);
+            } while (!flag);
         } else {
             LogError();
         }
-    } else if(choice == 3) {
+    } else if (choice == 3) {
         Exit = true;
-        return;
     } else {
         ThrowError();
     }
@@ -268,7 +245,6 @@ void LogError() {
     int choice;
     printf(RED"1. Try Again\n"CLEAR);
     printf("2. Exit\n");
-
     printf("Enter Choice: ");
     scanf("%d", &choice);
 
@@ -312,5 +288,4 @@ int main() {
     } while (true);
 
     return 0;
-
 }
