@@ -5,6 +5,7 @@
 
 #define RED "\x1B[31m"
 #define GREEN "\x1B[32m"
+#define ORANGE "\x1B[33m"
 #define CLEAR "\x1B[0m"
 
 typedef struct {
@@ -42,11 +43,40 @@ Item **store = NULL;
 Customer **list = NULL;
 Employee **Mlist = NULL;
 
+
+void ThankUser() {
+    printf(GREEN"Thank you. Visit again ;) \n" CLEAR);
+}
+
+void Nouser() {
+    printf(RED"Please SignUp First\n"CLEAR);
+}
+
+void LogOutMsg() {
+    printf(GREEN"Exiting Succesfull\n"CLEAR);
+}
+
+void ThankEmployee() {
+    printf(GREEN"Changes Done.\n" CLEAR);
+}
+
+void window_alert() {
+    printf(GREEN"\nRegistered\n"CLEAR);
+}
+
+void ThrowError() {
+    printf(RED"\nError 402 Command Not Found\n"CLEAR);
+}
+
+void LogConfirm() {
+    printf(GREEN"Login Successful!\n"CLEAR);
+}
+
 void initializeStore() {
     store = (Item **)malloc(5 * sizeof(Item *));
     for (int i = 0; i < 5; i++) {
         store[i] = (Item *)malloc(sizeof(Item));
-        store[i]->itemname = (char *)malloc(20 * sizeof(char)); // Allocate memory for itemname
+        store[i]->itemname = (char *)malloc(20 * sizeof(char));
     }
 
     strcpy(store[0]->itemname, "Pencil");
@@ -74,8 +104,8 @@ void initializeEmployeeList() {
     Mlist = (Employee **)malloc(3 * sizeof(Employee *));
     for (int i = 0; i < 3; i++) {
         Mlist[i] = (Employee *)malloc(sizeof(Employee));
-        Mlist[i]->name = (char *)malloc(12 * sizeof(char)); // Allocate memory for name
-        Mlist[i]->password = (char *)malloc(12 * sizeof(char)); // Allocate memory for password
+        Mlist[i]->name = (char *)malloc(12 * sizeof(char));
+        Mlist[i]->password = (char *)malloc(12 * sizeof(char));
     }
     strcpy(Mlist[0]->name, "Nikhil");
     strcpy(Mlist[0]->password, "1234");
@@ -85,35 +115,11 @@ void initializeEmployeeList() {
     strcpy(Mlist[2]->password, "nrokzzzz");
 }
 
-void ThankUser() {
-    printf(GREEN"Thank you. Visit again ;) \n" CLEAR);
-}
-
-void Nouser() {
-    printf(RED"Please SignUp First\n"CLEAR);
-}
-
-void ThankEmployee() {
-    printf(GREEN"Changes Done.\n" CLEAR);
-}
-
-void window_alert() {
-    printf(GREEN"\nRegistered\n"CLEAR);
-}
-
-void ThrowError() {
-    printf(RED"\nError 402 Command Not Found\n"CLEAR);
-}
-
-void LogConfirm() {
-    printf(GREEN"Login Successful!\n"CLEAR);
-}
-
 void AddItem() {
     int index = newitemid - 10000;
     store = (Item **)realloc(store, (index + 1) * sizeof(Item *));
     store[index] = (Item *)malloc(sizeof(Item));
-    store[index]->itemname = (char *)malloc(20 * sizeof(char)); // Allocate memory for itemname
+    store[index]->itemname = (char *)malloc(20 * sizeof(char));
 
     printf("Enter Item Name: ");
     scanf("%s", store[index]->itemname);
@@ -147,9 +153,20 @@ void DisplayStock() {
     }
 }
 
+void DisplayCart(int id) {
+    Cart* head = list[id]->cart;
+    printf("Item \t No.of Items \t Price \n");
+    while(head != NULL){
+        printf("%s \t ", head->itemname);
+        printf("%d \t\t",head->Nitems);
+        printf("%d \n",head->price);
+        head = head->next;
+    }
+}
+
 void Billing(int id){
     Cart *head=list[id]->cart;
-    int total=0;
+    int total = 0;
     printf("Item \t No. of Items \t Price \n");
     while(head != NULL){
         total += head->price;
@@ -175,63 +192,68 @@ void BuyItems(int id){
 	int i = 0;
     DisplayStock();
 	do{
-	if(i!=0) {
-		printf("1. Continue Shopping\n");
-		printf("2. Stop the Shopping\n");
-		int choice;
-		printf("Choose Your option:");
-		scanf("%d",&choice);
-		if(choice != 1) {
-			printf(GREEN"\nThanku for You Responce\n"CLEAR);
-			Billing(id);
-            return;
+	    if(i != 0) {
+            int choice;
+		    printf("1. Continue Shopping\n");
+		    printf("2. Stop the Shopping\n");
+		    printf("Choose Your option:");
+		    scanf("%d",&choice);
+		    if(choice != 1) {
+			    printf(GREEN"\nThanku for You Responce\n"CLEAR);
+			    // Billing(id);
+                return;
+	        }
 	    }
-	}
-	i++;
+	    i++;
 	
 	
-	int item_id;
-	printf("Enter item Id: ");
+	    int item_id;
+	    printf("Enter item Id: ");
 
-	scanf("%d",&item_id);
-	printf("\nEnter No.of items: ");
-    item_id -= 10000;
-	int nitems;
-	scanf("%d", &nitems);
-	if(item_id < newitemid - 10000){
-		if(store[item_id]->quantity > 0){
-			if(nitems <= store[item_id]->quantity) {		
-			store[item_id]->quantity -= nitems;
-			Cart* additem=(Cart*)malloc(sizeof(Cart));
-			strcpy(additem->itemname,store[item_id]->itemname);	
-			additem->price = nitems*store[item_id]->price;
-			additem->Nitems = nitems;
-			additem->next == NULL;
-			insert(additem,id);
-		}
-		else
-		printf(RED"\nOut of Stock\n"CLEAR);
-	} else 
-		printf(RED"\nStock is Not Availabile\n"CLEAR);
-	}
-	else
-	 	printf(RED"\nItem is Not Availabile\n"CLEAR);
-	}while(true);
+	    scanf("%d", &item_id);
+	    printf("\nEnter No.of items: ");
+
+        int nitems;
+        item_id -= 10000;
+	    scanf("%d", &nitems);
+	    if(item_id < newitemid - 10000){
+		    if(store[item_id]->quantity > 0){
+			    if(nitems <= store[item_id]->quantity) {		
+			        store[item_id]->quantity -= nitems;
+			        Cart* additem=(Cart*)malloc(sizeof(Cart));
+			        strcpy(additem->itemname,store[item_id]->itemname);	
+			        additem->price = nitems*store[item_id]->price;
+			        additem->Nitems = nitems;
+			        additem->next == NULL;
+			        insert(additem,id);
+		        } else {
+                    printf(RED"\nOut of Stock\n"CLEAR);
+                }
+	        } else {
+                printf(RED"\nStock is Not Availabile\n"CLEAR);
+            }
+	    } else {
+            printf(RED"\nItem is Not Availabile\n"CLEAR);
+        }
+	} while(true);
 }
 
 void RegisterUser() {
+    printf("\n\n");
     int index = newid - 100;
     list = (Customer **)realloc(list, index * sizeof(Customer *));
     list[index] = (Customer *)malloc(sizeof(Customer));
     list[index]->name = (char *)malloc(12 * sizeof(char));
     list[index]->password = (char *)malloc(12 * sizeof(char));
-    printf("Enter your Name: ");
+    printf("Enter User Name: ");
     scanf(" %[^\n]s", list[index]->name);
 
-    printf("Enter your Password: ");
+    printf("Enter User Password: ");
     scanf(" %s", list[index]->password);
 
-    printf(GREEN"\nYour User Id is: %d\n"CLEAR, newid);
+    printf(ORANGE"Generating Unique User Id...\n"CLEAR);
+    printf(GREEN"Generated Successfull\n");
+    printf("\nYour User Id is: %d\n"CLEAR, newid);
     newid++;
 }
 
@@ -259,6 +281,9 @@ bool LogUser() {
     printf("Enter the User Id: ");
     scanf("%d", &id);
     userId = id - 100;
+    if(userId > newid) {
+        return false;
+    }
     char pass[12];
     printf("Enter the User Password: ");
     scanf("%s", pass);
@@ -266,6 +291,34 @@ bool LogUser() {
     int check = strcmp(list[id - 100]->password, pass);
 
     return check == 0;
+}
+
+
+void UserMenuInterface() {
+    do {
+        int choice;
+        printf("1. Item Menu\n");
+        printf("2. Buy Items\n");
+        printf("3. Display Cart\n");
+        printf("4. Exit\n");
+        printf("Enter Choice: ");
+        scanf("%d", &choice);
+        switch(choice) {
+            case 1:
+                DisplayStock();
+                break;
+            case 2:
+                BuyItems(userId);
+                break;
+            case 3:
+                DisplayCart(userId);
+                break;
+            case 4:
+                return;
+            default:
+                ThrowError();
+        }
+    } while(true);
 }
 
 void LogInterface();
@@ -282,7 +335,7 @@ void LogInterface() {
     if (choice == 1) {
         if (LogUser()) {
             LogConfirm();
-            BuyItems(userId);
+            UserMenuInterface();
         } else {
             if(newid == 100) {
                 Nouser();
@@ -335,7 +388,7 @@ void LogError() {
 
     int choice;
     printf(RED"1. Try Again\n"CLEAR);
-    printf("2. Exit\n");
+    printf(GREEN"2. Exit\n"CLEAR);
     printf("Enter Choice: ");
     scanf("%d", &choice);
 
@@ -346,28 +399,97 @@ void LogError() {
     }
 }
 
+void EnterEmployee() {
+    if (LogEmployee()) {
+        LogConfirm();
+        int flag = 0;
+        do {
+            int choice;
+            printf("1. Stock Items\n");
+            printf("2. Restock Items\n");
+            printf("3. Display Stock\n");
+            printf("4. Exit\n");
+            printf("Enter Your Choice: ");
+            scanf("%d", &choice);
+
+            switch (choice) {
+                case 1:
+                    AddItem();
+                    break;
+                case 2:
+                    StockUp();
+                    break;
+                case 3:
+                    DisplayStock();
+                    break;
+                case 4:
+                    flag = 1;
+                    ThankEmployee();
+                    break;
+                default:
+                    ThrowError();
+            }
+        } while (!flag);
+    } else {
+            LogError();
+    }
+}
+
+void Enteruser() {
+    do {
+        int choice;
+        printf("1. Sign Up.\n");
+        printf("2. Log In\n");
+        printf("3. Exit\n");
+        printf("Enter Choice: ");
+        scanf("%d", &choice);
+        switch(choice) {
+            case 1:
+                RegisterUser();
+                window_alert();
+                break;
+            case 2:
+                if (LogUser()) {
+                    LogConfirm();
+                    UserMenuInterface();
+                } else {
+                    if(newid == 100) {
+                        Nouser();
+                    } else {
+                        LogError();
+                    }
+                }
+                LogConfirm();
+                UserMenuInterface();
+                break;
+            case 3:
+                return;
+            default:
+                ThrowError();
+        }
+    } while(true);
+}
+
 int main() {
     initializeEmployeeList();
     initializeStore();
     do {
         int Query;
         printf("\n");
-        printf("1. Sign up\n");
-        printf("2. Log in\n");
+        /* printf("1. Sign up\n"); */  printf("1. User Interface\n");
+        /* printf("2. Log in\n"); */ printf("2. Admin Interface\n");
         printf("3. Exit\n");
         printf("Choose Event: ");
         scanf("%d", &Query);
 
         switch (Query) {
             case 1:
-                RegisterUser();
-                window_alert();
+                Enteruser(); // RegisterUser();
+                LogOutMsg();
                 break;
             case 2:
-                Exit = false;
-                do {
-                    LogInterface();
-                } while (!Exit);
+                EnterEmployee();
+                LogConfirm();
                 break;
             case 3:
                 ThankUser();
@@ -377,6 +499,10 @@ int main() {
         }
 
     } while (true);
+
+    free(list);
+    free(Mlist);
+    free(store);
 
     return 0;
 }
