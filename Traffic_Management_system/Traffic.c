@@ -10,25 +10,27 @@
 #define GREEN "\x1B[32m"
 #define CLEAR "\x1B[0m"
 
+
+// Vehicle structure
 typedef struct vehicle {
     char* Id;
     char Route;
     int Speed;
 } Vehicle;
 
-Vehicle** list = NULL;
+Vehicle** list = NULL; 
 
-int VehicleCount;
-int RutF[26], RutA[26]; // Constant O(1)
+int VehicleCount; // To keep Track of Vehicles
+int RutF[26], RutA[26]; // Constant O(1) Keeps Track of Data.
 
-void PromptQuery();
+void PromptQuery(); // O(1)
 void RegisterVehicle();
 void cmp(const void* a, const void* b);
-void OptimizeTrafficFlow(bool a);
-void RealTimeTraffic();
+void OptimizeTrafficFlow(bool a); // O(N log N)
+void RealTimeTraffic();  // O(N)
 void DisplayTraffic();
 void ThrowError();
-void Display();
+void Display(); // O(N)
 void window_alert();
 void ThankUser();
 
@@ -46,17 +48,17 @@ int main() {
 
         switch(Query) {
             case 1:
-                    RegisterVehicle(); // O(1)
+                    RegisterVehicle();
                     window_alert();
                     break;
             case 2:
-                    OptimizeTrafficFlow(false); // O(N log N)
+                    OptimizeTrafficFlow(false);
                     break;
             case 3:
-                    RealTimeTraffic(); // O(N)
+                    RealTimeTraffic();
                     break;
             case 4:
-                    Display(); // O(N)
+                    Display();
                     break;
             case 5:
                     ThankUser();
@@ -70,6 +72,7 @@ int main() {
     return 0;
 }
 
+
 void PromptQuery() {
     list[VehicleCount] = (Vehicle *)malloc(sizeof(Vehicle));
     list[VehicleCount]->Id = (char *) malloc(sizeof(char) * 7);
@@ -82,16 +85,17 @@ void PromptQuery() {
 
     printf("Enter Vehicle Route: ");
     scanf(" %c", &list[VehicleCount]->Route);
-    RutF[list[VehicleCount]->Route - 'A']++;
+    RutF[list[VehicleCount]->Route - 'A']++; // Vehicles Count in there respective Routes.
 
     printf("Enter Vehicle Speed: ");
     scanf("%d", &list[VehicleCount]->Speed);
 
-    RutA[list[VehicleCount]->Route - 'A'] +=  list[VehicleCount]->Speed;
+    RutA[list[VehicleCount]->Route - 'A'] +=  list[VehicleCount]->Speed; // keeping track of all vehicle speeds in there respective Routes.
     
     VehicleCount++;
 }
 
+// Register vehicle uses O(1) to register a vehicle.
 void RegisterVehicle() {
     list = (Vehicle **)realloc(list, (VehicleCount + 1) * sizeof(Vehicle *));
     PromptQuery();
@@ -107,6 +111,8 @@ int cmp(const void* a, const void* b) {
     return RutF[list[*(int*)b]->Route - 'A'] - RutF[list[*(int*)a]->Route - 'A'];
 }
 
+
+// OptimizeTrafficFlow uses custom qsort to optimise the data. 
 void OptimizeTrafficFlow(bool a) {
     int FlowControl[VehicleCount];
     for(int i = 0; i < VehicleCount; i++) {
@@ -133,6 +139,8 @@ void OptimizeTrafficFlow(bool a) {
     }
 }
 
+
+// RealTimeTraffic 
 void RealTimeTraffic() {
     for(int i = 0; i < 26; i++) {
         if(RutF[i]) {
