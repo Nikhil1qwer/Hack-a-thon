@@ -25,7 +25,6 @@ int RutF[26], RutA[26]; // Constant O(1) Keeps Track of Data.
 
 void PromptQuery(); // O(1)
 void RegisterVehicle();
-void cmp(const void* a, const void* b);
 void OptimizeTrafficFlow(bool a); // O(N log N)
 void RealTimeTraffic();  // O(N)
 void DisplayTraffic();

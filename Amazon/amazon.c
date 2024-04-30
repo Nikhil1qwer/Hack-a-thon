@@ -125,7 +125,7 @@ void StockUp() {
     printf("Enter Item Quantity: ");
     scanf("%d", &add);
 
-    store[id - 10005]->quantity += add;
+    store[id - 10000]->quantity += add;
 }
 
 void DisplayStock() {
@@ -142,12 +142,12 @@ void RegisterUser() {
     list[index]->name = (char *)malloc(12 * sizeof(char)); // Allocate memory for name
     list[index]->password = (char *)malloc(12 * sizeof(char)); // Allocate memory for password
     printf("Enter your Name: ");
-    scanf("%s", list[index]->name);
+    scanf(" %[^\n]s", list[index]->name);
 
     printf("Enter your Password: ");
-    scanf("%s", list[index]->password);
+    scanf(" %s", list[index]->password);
 
-    printf(GREEN"\nYour Registration Id is: %d\n"CLEAR, newid);
+    printf(GREEN"\nYour User Id is: %d\n"CLEAR, newid);
     newid++;
 }
 
