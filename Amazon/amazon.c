@@ -35,10 +35,9 @@ typedef struct {
 } Customer;
 
 int UserId;
-bool Exit = false;
-bool SignInUserList = true;
 int NewId = 100;
-int NewItemId = 10005;
+int NewItemId = 10010;
+bool SignInUserList = true;
 
 Item **Store = NULL;
 Customer **UserList = NULL;
@@ -113,7 +112,7 @@ int main() {
 void Removal(int id) {
     char itemname[20];
     int choice;
-    DisplayCart();
+    DisplayCart(id);
     printf("1. Remove Item\n");
     printf("2. Modify Item\n");
     printf("Enter Choice: ");
@@ -123,24 +122,24 @@ void Removal(int id) {
         return;
     }
     printf("\nEnter Item Name: ");
-    getchar(); // Consume newline character left in the input buffer
+    getchar();
     fgets(itemname, sizeof(itemname), stdin);
-    itemname[strcspn(itemname, "\n")] = '\0'; // Remove newline character if present
+    itemname[strcspn(itemname, "\n")] = '\0';
 
     Cart* current = UserList[id]->cart;
     Cart* prev = NULL;
 
     while (current != NULL) {
         if (strcmp(current->itemname, itemname) == 0) {
-            if (choice == 1) { // Remove Item
-                if (prev == NULL) { // If the item to be removed is the first node
+            if (choice == 1) { 
+                if (prev == NULL) {
                     UserList[id]->cart = current->next;
                 } else {
                     prev->next = current->next;
                 }
-                free(current); // Free memory of the removed item
+                free(current);
                 printf("Item removed from the cart.\n");
-            } else if (choice == 2) { // Modify Item
+            } else if (choice == 2) {
                 int modifyQuantity;
                 printf("\nEnter Quantity to Modify: ");
                 scanf("%d", &modifyQuantity);
@@ -153,7 +152,7 @@ void Removal(int id) {
                     return;
                 }
                 current->Nitems = modifyQuantity;
-                Store[id]->quantity += (current->Nitems - modifyQuantity); // Update stock
+                Store[id]->quantity += (current->Nitems - modifyQuantity);
                 printf("Item quantity modified.\n");
             }
             return;
@@ -181,19 +180,20 @@ void initializeEmployeeUserList() {
 }
 
 void initializeStore() {
-    Store = (Item **)malloc(5 * sizeof(Item *));
-    for (int i = 0; i < 5; i++) {
+    Store = (Item **)malloc(10 * sizeof(Item *));
+    for (int i = 0; i < 10; i++) {
         Store[i] = (Item *)malloc(sizeof(Item));
         Store[i]->itemname = (char *)malloc(20 * sizeof(char));
     }
 
-    strcpy(Store[0]->itemname, "Pencil");
-    Store[0]->price = 5;
-    Store[0]->quantity = 12;
+    
+    strcpy(Store[0]->itemname, "Alexa");
+    Store[0]->price = 2500;
+    Store[0]->quantity = 60;
 
-    strcpy(Store[1]->itemname, "Pen");
-    Store[1]->price = 10;
-    Store[1]->quantity = 6;
+    strcpy(Store[1]->itemname, "Cooling Pad");
+    Store[1]->price = 150;
+    Store[1]->quantity = 120;
 
     strcpy(Store[2]->itemname, "MacBook");
     Store[2]->price = 50000;
@@ -206,7 +206,28 @@ void initializeStore() {
     strcpy(Store[4]->itemname, "Mouse");
     Store[4]->price = 250;
     Store[4]->quantity = 35;
+
+     strcpy(Store[5]->itemname, "Mouse Pad");
+    Store[5]->price = 150;
+    Store[5]->quantity = 30;
+
+    strcpy(Store[6]->itemname, "Mobile");
+    Store[6]->price = 10000;
+    Store[6]->quantity = 10;
+
+    strcpy(Store[7]->itemname, "PS 5");
+    Store[7]->price = 50000;
+    Store[7]->quantity = 20;
+
+    strcpy(Store[8]->itemname, "Laptop");
+    Store[8]->price = 25000;
+    Store[8]->quantity = 20;
+
+    strcpy(Store[9]->itemname, "Headset");
+    Store[9]->price = 6000;
+    Store[9]->quantity = 100;
 }
+
 
 bool LogEmployee() {
     int id;
@@ -431,7 +452,7 @@ void DisplayStock() {
     printf("\n");printf("\n");
     printf("\tItem Id\t\tItem Name\t\tPresent Stock\t\t\t Price\n");
     for (int i = 0; i < NewItemId - 10000; i++) {
-        printf("%11d \t\t %11s \t\t %11d\t\t %11d\n", 10000 + i, Store[i]->itemname, Store[i]->quantity, Store[i]->price);
+        printf("%11d \t\t %11s \t\t %11d\t\t %11d Rs\n", 10000 + i, Store[i]->itemname, Store[i]->quantity, Store[i]->price);
     }
     printf("\n");printf("\n");
 }
@@ -594,7 +615,7 @@ void LogError(int flag) {
 
 void UserData(){
 	if(NewId == 100) {
-		printf("No Sign in's Yet!!\n");
+		printf("No Sign In's Yet!!\n");
 		return;
 	} else {
 		printf("Details About users: \n");
