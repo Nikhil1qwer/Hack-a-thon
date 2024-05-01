@@ -133,13 +133,21 @@ void Removal(int id) {
     fgets(itemname, sizeof(itemname), stdin);
     itemname[strcspn(itemname, "\n")] = '\0';
 
+    int i = 0;
+    for(i = 0; i < NewItemId - 10000; i++) {
+        if(!strcmp(Store[i]->itemname, itemname)) {
+            break;
+        }
+    }
+
     Cart* current = UserList[id]->cart;
     Cart* prev = NULL;
 
     while (current != NULL) {
         if (strcmp(current->itemname, itemname) == 0) {
-            if (choice == 1) { 
+            if (choice == 1) {
                 if (prev == NULL) {
+                    Store[i]->quantity = UserList[id]->cart->Nitems;
                     UserList[id]->cart = current->next;
                 } else {
                     prev->next = current->next;
@@ -154,12 +162,12 @@ void Removal(int id) {
                     printf("Quantity cannot be negative.\n");
                     return;
                 }
-                if (modifyQuantity > Store[id]->quantity) {
+                if (modifyQuantity > current->Nitems) {
                     printf("Insufficient stock.\n");
                     return;
                 }
+                Store[i]->quantity += (current->Nitems - modifyQuantity);
                 current->Nitems = modifyQuantity;
-                Store[id]->quantity += (current->Nitems - modifyQuantity);
                 printf(GREEN BOLD"Item quantity modified.\n"CLEAR);
             }
             return;

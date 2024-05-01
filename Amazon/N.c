@@ -1,0 +1,1 @@
+Store[id]->quantity += (current->Nitems - modifyQuantity);
