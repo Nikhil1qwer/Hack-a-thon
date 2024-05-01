@@ -44,6 +44,8 @@ Item **Store = NULL;
 Customer **UserList = NULL;
 Employee **AdminList = NULL;
 
+
+
 void UserCookies(int id, const char *name, const char *password);
 void initializeEmployeeUserList();
 void initializeStore();
@@ -108,6 +110,61 @@ int main() {
     return 0;
 }
 
+void Removal(int id) {
+    char itemname[20];
+    int choice;
+    DisplayCart();
+    printf("1. Remove Item\n");
+    printf("2. Modify Item\n");
+    printf("Enter Choice: ");
+    scanf("%d", &choice);
+    if (choice != 1 && choice != 2) {
+        ThrowError();
+        return;
+    }
+    printf("\nEnter Item Name: ");
+    getchar(); // Consume newline character left in the input buffer
+    fgets(itemname, sizeof(itemname), stdin);
+    itemname[strcspn(itemname, "\n")] = '\0'; // Remove newline character if present
+
+    Cart* current = UserList[id]->cart;
+    Cart* prev = NULL;
+
+    while (current != NULL) {
+        if (strcmp(current->itemname, itemname) == 0) {
+            if (choice == 1) { // Remove Item
+                if (prev == NULL) { // If the item to be removed is the first node
+                    UserList[id]->cart = current->next;
+                } else {
+                    prev->next = current->next;
+                }
+                free(current); // Free memory of the removed item
+                printf("Item removed from the cart.\n");
+            } else if (choice == 2) { // Modify Item
+                int modifyQuantity;
+                printf("\nEnter Quantity to Modify: ");
+                scanf("%d", &modifyQuantity);
+                if (modifyQuantity < 0) {
+                    printf("Quantity cannot be negative.\n");
+                    return;
+                }
+                if (modifyQuantity > Store[id]->quantity) {
+                    printf("Insufficient stock.\n");
+                    return;
+                }
+                current->Nitems = modifyQuantity;
+                Store[id]->quantity += (current->Nitems - modifyQuantity); // Update stock
+                printf("Item quantity modified.\n");
+            }
+            return;
+        }
+        prev = current;
+        current = current->next;
+    }
+    printf("Item not found in the cart.\n");
+}
+
+
 void initializeEmployeeUserList() {
     AdminList = (Employee **)malloc(3 * sizeof(Employee *));
     for (int i = 0; i < 3; i++) {
@@ -156,6 +213,14 @@ bool LogEmployee() {
     printf("Enter the Employee Id: ");
     scanf("%d", &id);
 
+    if(id == 11) {
+        id = 0;
+    } else if(id == 22) {
+        id = 1;
+    } else if(id == 44) {
+        id = 2;
+    }
+
     printf(GREEN"Employee Name: %s\n"CLEAR, AdminList[id]->name);
 
     char enter_password[12];
@@ -177,7 +242,7 @@ void AdminMenuInterface() {
             printf("2. Restock Items\n");
             printf("3. Display Stock\n");
             printf("4. Display User Details\n");
-            printf("4. Exit\n");
+            printf("5. Exit\n");
             printf("Enter Your Choice: ");
             scanf("%d", &choice);
 
@@ -241,9 +306,10 @@ void UserMenuInterface() {
         printf(GREEN"\t\t\t %s\n"CLEAR, UserList[UserId]->name);
         printf("1. Item Menu\n");
         printf("2. Add Items to Cart\n");
-        printf("3. Display Cart\n");
-        printf("4. Buy Items\n");
-        printf("5. Exit\n");
+        printf("3. Remove Items in Cart\n");
+        printf("4. Display Cart\n");
+        printf("5. Buy Items\n");
+        printf("6. Exit\n");
         printf("Enter Choice: ");
         scanf("%d", &choice);
         switch(choice) {
@@ -254,12 +320,16 @@ void UserMenuInterface() {
                 BuyItems(UserId);
                 break;
             case 3:
-                DisplayCart(UserId);
+                Removal(UserId);
                 break;
             case 4:
-                Billing(UserId);
+                DisplayCart(UserId);
                 break;
             case 5:
+                Billing(UserId);
+                break;
+            case 6:
+                printf("\n");
                 return;
             default:
                 ThrowError();
@@ -421,7 +491,7 @@ void BuyItems(int id){
 		    printf("1. Continue Shopping\n");
 		    printf("2. Stop the Shopping\n");
             printf("\n");
-		    printf("Choose Your option: ");
+		    printf("choice Your option: ");
 		    scanf("%d",&choice);
 		    if(choice != 1) {
 			    printf(GREEN"\nThank You for Shopping\n"CLEAR);
@@ -431,11 +501,11 @@ void BuyItems(int id){
 	    i++;
 	
 	    int item_id;
-	    printf("\nEnter item Id: ");
+	    printf("\nEnter Item Id: ");
 	    scanf("%d", &item_id);
 
         int nitems;
-	    printf("\nEnter No.of items: ");
+	    printf("\nEnter No.of Item's: ");
 	    scanf("%d", &nitems);
 
         item_id -= 10000;
@@ -523,13 +593,13 @@ void LogError(int flag) {
 }
 
 void UserData(){
-	if(UserId - 100 <= 0) {
+	if(NewId == 100) {
 		printf("No Sign in's Yet!!\n");
 		return;
 	} else {
 		printf("Details About users: \n");
-		printf("SI.NO \t\t UserId \t\t User Name\n");
-		for(int i = 0; i < UserId - 100; i++){
+		printf("SI.NO \t\t UserId \t User Name\n");
+		for(int i = 0; i < NewId - 100; i++){
 			printf("%d \t\t %d \t\t %s \n", i + 1 , 100 + i, UserList[i]->name);
 		}
 	}
