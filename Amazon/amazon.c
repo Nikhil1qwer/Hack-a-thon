@@ -59,7 +59,7 @@ void Billing(int id);
 void DisplayCart(int id);
 void AddItem();
 void StockUp();
-void UserList();
+void UserData();
 void LogError(int flag);
 void ThankUser();
 void Nouser();
@@ -176,6 +176,7 @@ void AdminMenuInterface() {
             printf("1. Stock Items\n");
             printf("2. Restock Items\n");
             printf("3. Display Stock\n");
+            printf("4. Display User Details\n");
             printf("4. Exit\n");
             printf("Enter Your Choice: ");
             scanf("%d", &choice);
@@ -194,6 +195,9 @@ void AdminMenuInterface() {
                     DisplayStock();
                     break;
                 case 4:
+                    UserData();
+                    break;
+                case 5:
                     flag = 1;
                     break;
                 default:
@@ -234,6 +238,7 @@ void RegisterUser() {
 void UserMenuInterface() {
     do {
         int choice;
+        printf(GREEN"\t\t\t %s\n"CLEAR, UserList[UserId]->name);
         printf("1. Item Menu\n");
         printf("2. Add Items to Cart\n");
         printf("3. Display Cart\n");
@@ -517,7 +522,18 @@ void LogError(int flag) {
     }
 }
 
-
+void UserData(){
+	if(UserId - 100 <= 0) {
+		printf("No Sign in's Yet!!\n");
+		return;
+	} else {
+		printf("Details About users: \n");
+		printf("SI.NO \t\t UserId \t\t User Name\n");
+		for(int i = 0; i < UserId - 100; i++){
+			printf("%d \t\t %d \t\t %s \n", i + 1 , 100 + i, UserList[i]->name);
+		}
+	}
+}
 
 void UserCookies(int id, const char *name, const char *password) {
     FILE *fp = fopen("UserCookies.txt", "a");
