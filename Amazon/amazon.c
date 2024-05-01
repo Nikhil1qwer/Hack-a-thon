@@ -59,6 +59,7 @@ void Billing(int id);
 void DisplayCart(int id);
 void AddItem();
 void StockUp();
+void UserList();
 void LogError(int flag);
 void ThankUser();
 void Nouser();
@@ -515,6 +516,8 @@ void LogError(int flag) {
         return;
     }
 }
+
+
 
 void UserCookies(int id, const char *name, const char *password) {
     FILE *fp = fopen("UserCookies.txt", "a");
