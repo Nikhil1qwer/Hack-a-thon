@@ -3,11 +3,16 @@
 #include <string.h>
 #include <stdbool.h>
 
+
+// Ansii escapes codes
+#define BOLD  "\x1b[1m"
 #define RED "\x1B[31m"
 #define GREEN "\x1B[32m"
 #define ORANGE "\x1B[33m"
 #define CLEAR "\x1B[0m"
 
+
+// Structures to manipulate data.
 typedef struct {
     char *itemname;
     int quantity;
@@ -34,7 +39,8 @@ typedef struct {
     Cart *cart;
 } Customer;
 
-int UserId;
+// Global Variables.
+int UserId, AId;
 int NewId = 100;
 int NewItemId = 10010;
 bool SignInUserList = true;
@@ -46,7 +52,7 @@ Employee **AdminList = NULL;
 
 
 void UserCookies(int id, const char *name, const char *password);
-void initializeEmployeeUserList();
+void initializeEmployeeList();
 void initializeStore();
 bool LogEmployee();
 void AdminMenuInterface();
@@ -71,15 +77,15 @@ void ThrowError();
 void LogConfirm();
 
 int main() {
-    initializeEmployeeUserList();
+    initializeEmployeeList();
     initializeStore();
-    printf(GREEN"\n\n\n\t\t\t\tTecH Store\n\n"CLEAR);
+    printf(BOLD GREEN"\n\n\n\t\t\t\tTecH Store\n\n"CLEAR);
     do {
         int Query;
-        printf("\n");
+        printf(BOLD"\n");
         printf("1. User Interface\n");
         printf("2. Admin Interface\n");
-        printf("3. Exit\n");
+        printf("3. Exit\n"CLEAR);
         printf("Choose Event: ");
         scanf("%d", &Query);
 
@@ -164,9 +170,9 @@ void Removal(int id) {
 }
 
 
-void initializeEmployeeUserList() {
+void initializeEmployeeList() {
     AdminList = (Employee **)malloc(3 * sizeof(Employee *));
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 5; i++) {
         AdminList[i] = (Employee *)malloc(sizeof(Employee));
         AdminList[i]->name = (char *)malloc(12 * sizeof(char));
         AdminList[i]->password = (char *)malloc(12 * sizeof(char));
@@ -177,6 +183,10 @@ void initializeEmployeeUserList() {
     strcpy(AdminList[1]->password, "Umar1234");
     strcpy(AdminList[2]->name, "Nagendra");
     strcpy(AdminList[2]->password, "nrokzzzz");
+    strcpy(AdminList[3]->name, "AshokDon");
+    strcpy(AdminList[3]->password, "12013");
+    strcpy(AdminList[4]->name, "Kiran");
+    strcpy(AdminList[4]->password, "1234");
 }
 
 void initializeStore() {
@@ -240,7 +250,15 @@ bool LogEmployee() {
         id = 1;
     } else if(id == 44) {
         id = 2;
+    } else if(id == 1111) {
+        id = 3;
+    } else if(id == 2222) {
+        id = 4;
+    } else  {
+        return false;
     }
+
+    AId = id;
 
     printf(GREEN"Employee Name: %s\n"CLEAR, AdminList[id]->name);
 
@@ -259,11 +277,12 @@ void AdminMenuInterface() {
         int flag = 0;
         do {
             int choice;
-            printf("1. Stock Items\n");
+            printf(BOLD GREEN"\t\t\t\t %s\n" CLEAR, AdminList[AId]->name);
+            printf(BOLD"1. Stock Items\n");
             printf("2. Restock Items\n");
             printf("3. Display Stock\n");
             printf("4. Display User Details\n");
-            printf("5. Exit\n");
+            printf("5. Exit\n"CLEAR);
             printf("Enter Your Choice: ");
             scanf("%d", &choice);
 
@@ -325,12 +344,12 @@ void UserMenuInterface() {
     do {
         int choice;
         printf(GREEN"\t\t\t %s\n"CLEAR, UserList[UserId]->name);
-        printf("1. Item Menu\n");
+        printf(BOLD"1. Item Menu\n");
         printf("2. Add Items to Cart\n");
         printf("3. Remove Items in Cart\n");
         printf("4. Display Cart\n");
         printf("5. Buy Items\n");
-        printf("6. Exit\n");
+        printf("6. Exit\n"CLEAR);
         printf("Enter Choice: ");
         scanf("%d", &choice);
         switch(choice) {
@@ -450,20 +469,20 @@ void StockUp() {
 
 void DisplayStock() {
     printf("\n");printf("\n");
-    printf("\tItem Id\t\tItem Name\t\tPresent Stock\t\t\t Price\n");
+    printf(BOLD "\tItem Id\t\tItem Name\t\tPresent Stock\t\t\t Price\n");
     for (int i = 0; i < NewItemId - 10000; i++) {
         printf("%11d \t\t %11s \t\t %11d\t\t %11d Rs\n", 10000 + i, Store[i]->itemname, Store[i]->quantity, Store[i]->price);
     }
-    printf("\n");printf("\n");
+    printf("\n");printf("\n" CLEAR);
 }
 
 void DisplayCart(int id) {
     Cart* head = UserList[id]->cart;
     if(head == NULL) {
-        printf(RED"Cart is Empty!\n"CLEAR);
+        printf(BOLD RED"Cart is Empty!\n"CLEAR);
         return;
     }
-    printf("\n"); printf("\n");
+    printf(BOLD "\n"); printf("\n");
     printf("Item \t No.of Items \t Price \n");
     while(head != NULL){
         printf("%s \t ", head->itemname);
@@ -471,6 +490,7 @@ void DisplayCart(int id) {
         printf("%d \n",head->price);
         head = head->next;
     }
+    printf(""CLEAR);
 }
 
 void Billing(int id){
@@ -554,45 +574,45 @@ void BuyItems(int id){
 
 void ThankUser() {
     printf("\n");
-    printf(GREEN"Thank you. Visit again ;) \n" CLEAR);
+    printf(BOLD GREEN"Thank you. Visit again ;) \n" CLEAR);
     printf("\n");
 }
 
 void Nouser() {
     printf("\n");
-    printf(RED"Please SignUp First\n"CLEAR);
+    printf(BOLD RED"Please SignUp First\n"CLEAR);
     printf("\n");
 }
 
 void LogOutMsg() {
     printf("\n");
-    printf(GREEN"Exiting Succesfull\n"CLEAR);
+    printf(BOLD GREEN"Exiting Succesfull\n"CLEAR);
     printf("\n");
 }
 
 void ThankEmployee() {
     printf("\n");
-    printf(GREEN"Changes Done.\n" CLEAR);
+    printf(BOLD GREEN"Changes Done.\n" CLEAR);
     printf("\n");
 }
 
 void window_alert() {
-    printf(GREEN"\nRegistered\n"CLEAR);
+    printf(BOLD GREEN"Registered\n\n"CLEAR);
 }
 
 void ThrowError() {
-    printf(RED"\nError 402 Command Not Found\n"CLEAR);
+    printf(BOLD RED"\nError 402 Command Not Found\n"CLEAR);
     printf("\n");
 }
 
 void LogConfirm() {
     printf("\n");
-    printf(GREEN"Login Successful!\n"CLEAR);
+    printf(BOLD GREEN"Login Successful!\n"CLEAR);
     printf("\n");
 }
 
 void LogError(int flag) {
-    printf(RED"\nWrong Password\n");
+    printf( BOLD RED"\nWrong Password\n");
 
     int choice;
     printf("1. Try Again\n"CLEAR);
